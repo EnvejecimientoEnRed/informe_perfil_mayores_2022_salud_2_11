@@ -1,55 +1,163 @@
-Edad,Estado de salud,Ambos sexos,H,M
-TOTAL,Total,100,100,100
-TOTAL,Muy bueno,25.75,28.17,23.45
-TOTAL,Bueno,49.76,51.1,48.49
-TOTAL,Regular,17.45,15.23,19.56
-TOTAL,Malo,5.53,4.37,6.62
-TOTAL,Muy malo,1.51,1.13,1.87
-De 15 a 24 años,Total,100,100,100
-De 15 a 24 años,Muy bueno,54.07,58.99,48.89
-De 15 a 24 años,Bueno,38.25,34.91,41.78
-De 15 a 24 años,Regular,6.85,5.45,8.32
-De 15 a 24 años,Malo,0.52,0.33,0.72
-De 15 a 24 años,Muy malo,0.31,0.32,0.3
-De 25 a 34 años,Total,100,100,100
-De 25 a 34 años,Muy bueno,41.06,43.84,38.28
-De 25 a 34 años,Bueno,48.63,48.47,48.79
-De 25 a 34 años,Regular,8.97,6.85,11.09
-De 25 a 34 años,Malo,1.03,0.64,1.42
-De 25 a 34 años,Muy malo,0.31,0.2,0.41
-De 35 a 44 años,Total,100,100,100
-De 35 a 44 años,Muy bueno,31.25,31.29,31.21
-De 35 a 44 años,Bueno,54.32,55.85,52.79
-De 35 a 44 años,Regular,11.53,10.22,12.84
-De 35 a 44 años,Malo,2.41,2.14,2.67
-De 35 a 44 años,Muy malo,0.49,0.5,0.48
-De 45 a 54 años,Total,100,100,100
-De 45 a 54 años,Muy bueno,23.28,25.24,21.3
-De 45 a 54 años,Bueno,56.05,56.86,55.24
-De 45 a 54 años,Regular,14.58,12.99,16.18
-De 45 a 54 años,Malo,4.85,3.8,5.9
-De 45 a 54 años,Muy malo,1.25,1.11,1.38
-De 55 a 64 años,Total,100,100,100
-De 55 a 64 años,Muy bueno,13.89,14.74,13.07
-De 55 a 64 años,Bueno,56.12,57.48,54.82
-De 55 a 64 años,Regular,22,20.41,23.52
-De 55 a 64 años,Malo,6.31,5.78,6.82
-De 55 a 64 años,Muy malo,1.68,1.59,1.77
-De 65 a 74 años,Total,100,100,100
-De 65 a 74 años,Muy bueno,10.17,11.38,9.16
-De 65 a 74 años,Bueno,50.67,54.66,47.33
-De 65 a 74 años,Regular,27.57,23.98,30.59
-De 65 a 74 años,Malo,8.69,7.69,9.53
-De 65 a 74 años,Muy malo,2.89,2.3,3.39
-De 75 a 84 años,Total,100,100,100
-De 75 a 84 años,Muy bueno,6.21,7.2,5.38
-De 75 a 84 años,Bueno,37.66,42.45,33.62
-De 75 a 84 años,Regular,36.29,34.51,37.78
-De 75 a 84 años,Malo,16.43,14.11,18.38
-De 75 a 84 años,Muy malo,3.42,1.74,4.84
-De 85 y más años,Total,100,100,100
-De 85 y más años,Muy bueno,2.23,3.28,1.67
-De 85 y más años,Bueno,29.92,35.16,27.11
-De 85 y más años,Regular,38.17,40.56,36.88
-De 85 y más años,Malo,22.2,15.45,25.82
-De 85 y más años,Muy malo,7.47,5.53,8.51
+Sexo,Edad,Estado de salud,Valor
+Ambos sexos,TOTAL,Total,100
+Ambos sexos,TOTAL,Muy bueno,25.75
+Ambos sexos,TOTAL,Bueno,49.76
+Ambos sexos,TOTAL,Regular,17.45
+Ambos sexos,TOTAL,Malo,5.53
+Ambos sexos,TOTAL,Muy malo,1.51
+Ambos sexos,De 15 a 24 años,Total,100
+Ambos sexos,De 15 a 24 años,Muy bueno,54.07
+Ambos sexos,De 15 a 24 años,Bueno,38.25
+Ambos sexos,De 15 a 24 años,Regular,6.85
+Ambos sexos,De 15 a 24 años,Malo,0.52
+Ambos sexos,De 15 a 24 años,Muy malo,0.31
+Ambos sexos,De 25 a 34 años,Total,100
+Ambos sexos,De 25 a 34 años,Muy bueno,41.06
+Ambos sexos,De 25 a 34 años,Bueno,48.63
+Ambos sexos,De 25 a 34 años,Regular,8.97
+Ambos sexos,De 25 a 34 años,Malo,1.03
+Ambos sexos,De 25 a 34 años,Muy malo,0.31
+Ambos sexos,De 35 a 44 años,Total,100
+Ambos sexos,De 35 a 44 años,Muy bueno,31.25
+Ambos sexos,De 35 a 44 años,Bueno,54.32
+Ambos sexos,De 35 a 44 años,Regular,11.53
+Ambos sexos,De 35 a 44 años,Malo,2.41
+Ambos sexos,De 35 a 44 años,Muy malo,0.49
+Ambos sexos,De 45 a 54 años,Total,100
+Ambos sexos,De 45 a 54 años,Muy bueno,23.28
+Ambos sexos,De 45 a 54 años,Bueno,56.05
+Ambos sexos,De 45 a 54 años,Regular,14.58
+Ambos sexos,De 45 a 54 años,Malo,4.85
+Ambos sexos,De 45 a 54 años,Muy malo,1.25
+Ambos sexos,De 55 a 64 años,Total,100
+Ambos sexos,De 55 a 64 años,Muy bueno,13.89
+Ambos sexos,De 55 a 64 años,Bueno,56.12
+Ambos sexos,De 55 a 64 años,Regular,22
+Ambos sexos,De 55 a 64 años,Malo,6.31
+Ambos sexos,De 55 a 64 años,Muy malo,1.68
+Ambos sexos,De 65 a 74 años,Total,100
+Ambos sexos,De 65 a 74 años,Muy bueno,10.17
+Ambos sexos,De 65 a 74 años,Bueno,50.67
+Ambos sexos,De 65 a 74 años,Regular,27.57
+Ambos sexos,De 65 a 74 años,Malo,8.69
+Ambos sexos,De 65 a 74 años,Muy malo,2.89
+Ambos sexos,De 75 a 84 años,Total,100
+Ambos sexos,De 75 a 84 años,Muy bueno,6.21
+Ambos sexos,De 75 a 84 años,Bueno,37.66
+Ambos sexos,De 75 a 84 años,Regular,36.29
+Ambos sexos,De 75 a 84 años,Malo,16.43
+Ambos sexos,De 75 a 84 años,Muy malo,3.42
+Ambos sexos,De 85 y más años,Total,100
+Ambos sexos,De 85 y más años,Muy bueno,2.23
+Ambos sexos,De 85 y más años,Bueno,29.92
+Ambos sexos,De 85 y más años,Regular,38.17
+Ambos sexos,De 85 y más años,Malo,22.2
+Ambos sexos,De 85 y más años,Muy malo,7.47
+H,TOTAL,Total,100
+H,TOTAL,Muy bueno,28.17
+H,TOTAL,Bueno,51.1
+H,TOTAL,Regular,15.23
+H,TOTAL,Malo,4.37
+H,TOTAL,Muy malo,1.13
+H,De 15 a 24 años,Total,100
+H,De 15 a 24 años,Muy bueno,58.99
+H,De 15 a 24 años,Bueno,34.91
+H,De 15 a 24 años,Regular,5.45
+H,De 15 a 24 años,Malo,0.33
+H,De 15 a 24 años,Muy malo,0.32
+H,De 25 a 34 años,Total,100
+H,De 25 a 34 años,Muy bueno,43.84
+H,De 25 a 34 años,Bueno,48.47
+H,De 25 a 34 años,Regular,6.85
+H,De 25 a 34 años,Malo,0.64
+H,De 25 a 34 años,Muy malo,0.2
+H,De 35 a 44 años,Total,100
+H,De 35 a 44 años,Muy bueno,31.29
+H,De 35 a 44 años,Bueno,55.85
+H,De 35 a 44 años,Regular,10.22
+H,De 35 a 44 años,Malo,2.14
+H,De 35 a 44 años,Muy malo,0.5
+H,De 45 a 54 años,Total,100
+H,De 45 a 54 años,Muy bueno,25.24
+H,De 45 a 54 años,Bueno,56.86
+H,De 45 a 54 años,Regular,12.99
+H,De 45 a 54 años,Malo,3.8
+H,De 45 a 54 años,Muy malo,1.11
+H,De 55 a 64 años,Total,100
+H,De 55 a 64 años,Muy bueno,14.74
+H,De 55 a 64 años,Bueno,57.48
+H,De 55 a 64 años,Regular,20.41
+H,De 55 a 64 años,Malo,5.78
+H,De 55 a 64 años,Muy malo,1.59
+H,De 65 a 74 años,Total,100
+H,De 65 a 74 años,Muy bueno,11.38
+H,De 65 a 74 años,Bueno,54.66
+H,De 65 a 74 años,Regular,23.98
+H,De 65 a 74 años,Malo,7.69
+H,De 65 a 74 años,Muy malo,2.3
+H,De 75 a 84 años,Total,100
+H,De 75 a 84 años,Muy bueno,7.2
+H,De 75 a 84 años,Bueno,42.45
+H,De 75 a 84 años,Regular,34.51
+H,De 75 a 84 años,Malo,14.11
+H,De 75 a 84 años,Muy malo,1.74
+H,De 85 y más años,Total,100
+H,De 85 y más años,Muy bueno,3.28
+H,De 85 y más años,Bueno,35.16
+H,De 85 y más años,Regular,40.56
+H,De 85 y más años,Malo,15.45
+H,De 85 y más años,Muy malo,5.53
+M,TOTAL,Total,100
+M,TOTAL,Muy bueno,23.45
+M,TOTAL,Bueno,48.49
+M,TOTAL,Regular,19.56
+M,TOTAL,Malo,6.62
+M,TOTAL,Muy malo,1.87
+M,De 15 a 24 años,Total,100
+M,De 15 a 24 años,Muy bueno,48.89
+M,De 15 a 24 años,Bueno,41.78
+M,De 15 a 24 años,Regular,8.32
+M,De 15 a 24 años,Malo,0.72
+M,De 15 a 24 años,Muy malo,0.3
+M,De 25 a 34 años,Total,100
+M,De 25 a 34 años,Muy bueno,38.28
+M,De 25 a 34 años,Bueno,48.79
+M,De 25 a 34 años,Regular,11.09
+M,De 25 a 34 años,Malo,1.42
+M,De 25 a 34 años,Muy malo,0.41
+M,De 35 a 44 años,Total,100
+M,De 35 a 44 años,Muy bueno,31.21
+M,De 35 a 44 años,Bueno,52.79
+M,De 35 a 44 años,Regular,12.84
+M,De 35 a 44 años,Malo,2.67
+M,De 35 a 44 años,Muy malo,0.48
+M,De 45 a 54 años,Total,100
+M,De 45 a 54 años,Muy bueno,21.3
+M,De 45 a 54 años,Bueno,55.24
+M,De 45 a 54 años,Regular,16.18
+M,De 45 a 54 años,Malo,5.9
+M,De 45 a 54 años,Muy malo,1.38
+M,De 55 a 64 años,Total,100
+M,De 55 a 64 años,Muy bueno,13.07
+M,De 55 a 64 años,Bueno,54.82
+M,De 55 a 64 años,Regular,23.52
+M,De 55 a 64 años,Malo,6.82
+M,De 55 a 64 años,Muy malo,1.77
+M,De 65 a 74 años,Total,100
+M,De 65 a 74 años,Muy bueno,9.16
+M,De 65 a 74 años,Bueno,47.33
+M,De 65 a 74 años,Regular,30.59
+M,De 65 a 74 años,Malo,9.53
+M,De 65 a 74 años,Muy malo,3.39
+M,De 75 a 84 años,Total,100
+M,De 75 a 84 años,Muy bueno,5.38
+M,De 75 a 84 años,Bueno,33.62
+M,De 75 a 84 años,Regular,37.78
+M,De 75 a 84 años,Malo,18.38
+M,De 75 a 84 años,Muy malo,4.84
+M,De 85 y más años,Total,100
+M,De 85 y más años,Muy bueno,1.67
+M,De 85 y más años,Bueno,27.11
+M,De 85 y más años,Regular,36.88
+M,De 85 y más años,Malo,25.82
+M,De 85 y más años,Muy malo,8.51
