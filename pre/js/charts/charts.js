@@ -21,7 +21,7 @@ COLOR_OTHER_2 = '#731854';
 
 export function initChart(iframe) {
     //Lectura de datos
-    d3.csv('https://raw.githubusercontent.com/CarlosMunozDiazCSIC/informe_perfil_mayores_2022_salud_2_11/main/data/edades_quinquenales_salud_percibida.csv', function(error,data) {
+    d3.csv('https://raw.githubusercontent.com/CarlosMunozDiazCSIC/informe_perfil_mayores_2022_salud_2_11/main/data/edades_quinquenales_salud_percibida_v2.csv', function(error,data) {
         if (error) throw error;
         console.log(data);
 
@@ -30,7 +30,7 @@ export function initChart(iframe) {
         }
 
         function animateChart() {
-            
+
         }
 
         //////
