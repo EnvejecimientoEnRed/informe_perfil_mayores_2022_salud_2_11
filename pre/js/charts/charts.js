@@ -25,7 +25,7 @@ export function initChart(iframe) {
         if (error) throw error;
         
         let dataFiltered = data.filter(function(item) {
-            if (item.Edad != 'TOTAL' && item.Sexo != 'Ambos sexos') {
+            if (item.Edad != 'TOTAL' && item.Sexo != 'Ambos sexos' && item['Estado de salud'] != 'Total') {
                 return item;
             }
         });
@@ -69,15 +69,59 @@ export function initChart(iframe) {
             .call(d3.axisLeft(y));
 
         let z = d3.scaleOrdinal()
+            .domain(d3.map(dataFiltered, function(d){ return d['Estado de salud']; }).keys().reverse())
             .range([COLOR_PRIMARY_2, COLOR_PRIMARY_1, COLOR_GREY_1, COLOR_COMP_2, COLOR_COMP_1]);
+
+        let groupData = d3.nest()
+            .key(function(d) { return d.Sexo + d.Edad; })
+            .rollup(function(d, i){            
+                let d2 = {Sexo: d[0].Sexo, Edad: d[0].Edad}
+                d.forEach(function(d){
+                    d2[d['Estado de salud']] = +d.Valor
+                });
+            return d2;
+        })
+        .entries(dataFiltered).map(function(d){ return d.value; });
         
+        let stackData = d3.stack()
+            .keys(z.domain())
+            (groupData);
 
-        function init() {
+        let serie = svg.selectAll(".serie")
+            .data(stackData)
+            .enter()
+            .append("g")
+            .attr("class", "serie")
+            .attr("fill", function(d) { return z(d.key); });
 
+        function init() {  
+            serie.selectAll("rect")
+                .data(function(d) { return d; })
+                .enter()
+                .append("rect")
+                .attr("class", "serie-rect")
+                .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
+                .attr("x", function(d) { return x1(d.data.Sexo); })
+                .attr("y", function(d) { return y(0); })
+                .attr("height", function(d) { return 0; })
+                .attr("width", x1.bandwidth())
+                .transition()
+                .duration(2000)
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         }
 
         function animateChart() {
-
+            serie.selectAll(".serie-rect")
+                .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
+                .attr("x", function(d) { return x1(d.data.Sexo); })
+                .attr("y", function(d) { return y(0); })
+                .attr("height", function(d) { return 0; })
+                .attr("width", x1.bandwidth())
+                .transition()
+                .duration(2000)
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         }
 
         //////
@@ -102,7 +146,9 @@ export function initChart(iframe) {
 
         //Captura de pantalla de la visualización
         setChartCanvas();
-        setCustomCanvas();
+        setTimeout(() => {
+            setCustomCanvas();
+        }, 6000);        
 
         let pngDownload = document.getElementById('pngImage');
 
