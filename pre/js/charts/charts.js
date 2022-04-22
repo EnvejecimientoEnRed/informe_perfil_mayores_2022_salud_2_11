@@ -1,7 +1,7 @@
 //Desarrollo de las visualizaciones
 import * as d3 from 'd3';
-//import { numberWithCommas2 } from './helpers';
-//import { getInTooltip, getOutTooltip, positionTooltip } from './modules/tooltip';
+import { numberWithCommas3 } from '../helpers';
+import { getInTooltip, getOutTooltip, positionTooltip } from '../modules/tooltip';
 import { setChartHeight } from '../modules/height';
 import { setChartCanvas, setChartCanvasImage } from '../modules/canvas-image';
 import { setRRSSLinks } from '../modules/rrss';
@@ -12,12 +12,17 @@ const COLOR_PRIMARY_1 = '#F8B05C',
 COLOR_PRIMARY_2 = '#E37A42',
 COLOR_COMP_1 = '#528FAD', 
 COLOR_COMP_2 = '#AADCE0',
-COLOR_GREY_1 = '#D6D6D6', 
-COLOR_GREY_2 = '#A3A3A3',
-COLOR_ANAG__PRIM_1 = '#BA9D5F', 
-COLOR_ANAG_PRIM_2 = '#9E6C51',
-COLOR_ANAG_PRIM_3 = '#9E3515',
-COLOR_ANAG_COMP_1 = '#1C5A5E';
+COLOR_GREY_1 = '#D6D6D6';
+let tooltip = d3.select('#tooltip');
+
+//Diccionario
+let dictionary = {
+    1: 'Muy malo',
+    2: 'Malo',
+    3: 'Regular',
+    4: 'Bueno',
+    5: 'Muy bueno'
+};
 
 export function initChart(iframe) {
     //Lectura de datos
@@ -44,12 +49,12 @@ export function initChart(iframe) {
 
         let x0 = d3.scaleBand()
             .domain(d3.map(dataFiltered, function(d){ return d.Edad; }).keys())
-            .range([ 0, width ]);            
+            .range([ 0, width ]);           
             
         let x1 = d3.scaleBand()
             .domain(['H','M'])
             .rangeRound([0, x0.bandwidth()])
-            .padding(0.2);
+            .padding(0.25);
 
         svg.append("g")
             .attr("transform", "translate(0," + (height + 25) + ")")
@@ -65,8 +70,26 @@ export function initChart(iframe) {
         let y = d3.scaleLinear()
             .domain([0, 100])
             .range([ height, 0 ]);
+
+        let yAxis = function(svg) {
+            svg.call(d3.axisLeft(y).ticks(5).tickFormat(function(d,i) { return numberWithCommas3(d); }));
+            svg.call(function(g) {
+                g.call(function(g){
+                    g.selectAll('.tick line')
+                        .attr('class', function(d,i) {
+                            if (d == 0) {
+                                return 'line-special';
+                            }
+                        })
+                        .attr('x1', '0%')
+                        .attr('x2', `${width}`)
+                });
+            });
+        }
+
         svg.append("g")
-            .call(d3.axisLeft(y));
+            .attr("class", "yaxis")
+            .call(yAxis);
 
         let z = d3.scaleOrdinal()
             .domain(d3.map(dataFiltered, function(d){ return d['Estado de salud']; }).keys().reverse())
@@ -91,7 +114,9 @@ export function initChart(iframe) {
             .data(stackData)
             .enter()
             .append("g")
-            .attr("class", "serie")
+            .attr("class", function(d,i) {
+                return 'serie serie-' + i;
+            })
             .attr("fill", function(d) { return z(d.key); });
 
         function init() {  
@@ -99,12 +124,47 @@ export function initChart(iframe) {
                 .data(function(d) { return d; })
                 .enter()
                 .append("rect")
-                .attr("class", "serie-rect")
+                .attr("class", "rect")
                 .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
                 .attr("x", function(d) { return x1(d.data.Sexo); })
                 .attr("y", function(d) { return y(0); })
                 .attr("height", function(d) { return 0; })
                 .attr("width", x1.bandwidth())
+                .on('mouseover', function(d,i,e) {
+                    //Opacidad en barras
+                    let bars = svg.selectAll('.rect');
+                    let parentElem = svg.select(`.${this.parentNode.classList.value.split(' ')[1]}`);
+                    let childElems = parentElem.selectAll('.rect');            
+            
+                    bars.each(function() {
+                        this.style.opacity = '0.4';
+                    });
+                    childElems.each(function() {
+                        this.style.opacity = '1';
+                    });
+
+                    //Tooltip
+                    let currentType = this.parentNode.classList.value.split(' ')[1];
+                    let sexo = d.data.Sexo == 'M' ? 'mujeres' : 'hombres';
+                    let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
+                            '<p class="chart__tooltip--text">Un <b>' + d.data[dictionary[currentType.split('-')[1]]] + '%</b> de <b>' + sexo +'</b> en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                    
+                    tooltip.html(html);
+
+                    //Tooltip
+                    positionTooltip(window.event, tooltip);
+                    getInTooltip(tooltip);
+                })
+                .on('mouseout', function(d,i,e) {
+                    //Opacidad
+                    let bars = svg.selectAll('.rect');
+                    bars.each(function() {
+                        this.style.opacity = '1';
+                    });
+
+                    //Quitamos el tooltip
+                    getOutTooltip(tooltip);
+                })
                 .transition()
                 .duration(2000)
                 .attr("y", function(d) { return y(d[1]); })
@@ -112,7 +172,7 @@ export function initChart(iframe) {
         }
 
         function animateChart() {
-            serie.selectAll(".serie-rect")
+            serie.selectAll(".rect")
                 .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
                 .attr("x", function(d) { return x1(d.data.Sexo); })
                 .attr("y", function(d) { return y(0); })
