@@ -17,11 +17,11 @@ let tooltip = d3.select('#tooltip');
 
 //Diccionario
 let dictionary = {
-    1: 'Muy malo',
-    2: 'Malo',
-    3: 'Regular',
-    4: 'Bueno',
-    5: 'Muy bueno'
+    0: 'Muy mala',
+    1: 'Mala',
+    2: 'Regular',
+    3: 'Buena',
+    4: 'Muy buena'
 };
 
 export function initChart(iframe) {
@@ -147,7 +147,7 @@ export function initChart(iframe) {
                     let currentType = this.parentNode.classList.value.split(' ')[1];
                     let sexo = d.data.Sexo == 'M' ? 'mujeres' : 'hombres';
                     let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
-                            '<p class="chart__tooltip--text">Un <b>' + d.data[dictionary[currentType.split('-')[1]]] + '%</b> de <b>' + sexo +'</b> en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                            '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de <b>' + sexo +'</b> en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
                     
                     tooltip.html(html);
 
