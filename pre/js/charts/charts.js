@@ -12,7 +12,7 @@ const COLOR_PRIMARY_1 = '#F8B05C',
 COLOR_PRIMARY_2 = '#E37A42',
 COLOR_COMP_1 = '#528FAD', 
 COLOR_COMP_2 = '#AADCE0',
-COLOR_GREY_1 = '#D6D6D6';
+COLOR_GREY_1 = '#A3A3A3';
 let tooltip = d3.select('#tooltip');
 
 //Diccionario
@@ -34,6 +34,8 @@ export function initChart() {
                 return item;
             }
         });
+
+        console.log(dataFiltered)
 
         let margin = {top: 10, right: 10, bottom: 50, left: 30},
             width = document.getElementById('chart').clientWidth - margin.left - margin.right,
@@ -109,6 +111,8 @@ export function initChart() {
         let stackData = d3.stack()
             .keys(z.domain())
             (groupData);
+
+        console.log(stackData);
 
         let serie = svg.selectAll(".serie")
             .data(stackData)
