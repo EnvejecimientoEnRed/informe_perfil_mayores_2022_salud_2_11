@@ -24,7 +24,7 @@ let dictionary = {
     4: 'Muy buena'
 };
 
-export function initChart(iframe) {
+export function initChart() {
     //Lectura de datos
     d3.csv('https://raw.githubusercontent.com/CarlosMunozDiazCSIC/informe_perfil_mayores_2022_salud_2_11/main/data/edades_quinquenales_salud_percibida_v2.csv', function(error,data) {
         if (error) throw error;
@@ -192,6 +192,10 @@ export function initChart(iframe) {
         //Animación del gráfico
         document.getElementById('replay').addEventListener('click', function() {
             animateChart();
+
+            setTimeout(() => {
+                setChartCanvas();
+            }, 4000);    
         });
 
         //////
@@ -205,7 +209,9 @@ export function initChart(iframe) {
         setRRSSLinks('distribucion_estado_salud_percibida');
 
         //Captura de pantalla de la visualización
-        setChartCanvas();      
+        setTimeout(() => {
+            setChartCanvas();
+        }, 4000);      
 
         let pngDownload = document.getElementById('pngImage');
 
@@ -214,7 +220,7 @@ export function initChart(iframe) {
         });
 
         //Altura del frame
-        setChartHeight(iframe);
+        setChartHeight();
     });
 
 
