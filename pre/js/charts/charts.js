@@ -35,9 +35,7 @@ export function initChart() {
             }
         });
 
-        console.log(dataFiltered)
-
-        let margin = {top: 10, right: 10, bottom: 50, left: 30},
+        let margin = {top: 12.5, right: 10, bottom: 50, left: 30},
             width = document.getElementById('chart').clientWidth - margin.left - margin.right,
             height = document.getElementById('chart').clientHeight - margin.top - margin.bottom;
 
@@ -225,8 +223,5 @@ export function initChart() {
 
         //Altura del frame
         setChartHeight();
-    });
-
-
-    
+    });    
 }
