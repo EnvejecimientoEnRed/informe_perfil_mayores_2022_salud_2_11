@@ -26,130 +26,227 @@ let dictionary = {
 
 export function initChart() {
     //Lectura de datos
-    d3.csv('https://raw.githubusercontent.com/CarlosMunozDiazCSIC/informe_perfil_mayores_2022_salud_2_11/main/data/edades_quinquenales_salud_percibida_v2.csv', function(error,data) {
+    d3.csv('https://raw.githubusercontent.com/CarlosMunozDiazCSIC/informe_perfil_mayores_2022_salud_2_11/main/data/edades_quinquenales_salud_percibida_v3.csv', function(error,data) {
         if (error) throw error;
         
+        //Filtrado de datos
         let dataFiltered = data.filter(function(item) {
-            if (item.Edad != 'TOTAL' && item.Sexo != 'Ambos sexos' && item['Estado de salud'] != 'Total') {
+            if (item.Edad != 'TOTAL' && item.Sexo != 'Ambos sexos') {
                 return item;
             }
         });
 
-        let margin = {top: 12.5, right: 10, bottom: 50, left: 30},
-            width = document.getElementById('chart').clientWidth - margin.left - margin.right,
-            height = document.getElementById('chart').clientHeight - margin.top - margin.bottom;
+        let dataMen = dataFiltered.filter(function(item) {
+            if (item.Sexo == 'H') {
+                return item;
+            }
+        });
 
-        let svg = d3.select("#chart")
+        let dataWomen = dataFiltered.filter(function(item) {
+            if (item.Sexo == 'M') {
+                return item;
+            }
+        });
+
+        let grupos = ['muy_mala','mala','regular','buena','muy_buena'];
+
+        //Visualización
+        let margin = {top: 12.5, right: 10, bottom: 25, left: 32.5},
+            width = document.getElementById('bars--first').clientWidth - margin.left - margin.right,
+            height = document.getElementById('bars--first').clientHeight - margin.top - margin.bottom;
+
+        let chart1 = d3.select("#bars--first")
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        let x0 = d3.scaleBand()
+        let chart2 = d3.select("#bars--second")
+            .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        //EJES X
+        let x = d3.scaleBand()
             .domain(d3.map(dataFiltered, function(d){ return d.Edad; }).keys())
-            .range([ 0, width ]);           
+            .range([0, width]);
+
+        let xAxis = function(g) {
+            g.call(d3.axisBottom(x));
             
-        let x1 = d3.scaleBand()
-            .domain(['H','M'])
-            .rangeRound([0, x0.bandwidth()])
-            .padding(0.25);
+            g.call(function(g){g.selectAll('.tick line').remove()});
+            g.call(function(g){g.select('.domain').remove()});
+        }
+        
+        chart1.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
 
-        svg.append("g")
-            .attr("transform", "translate(0," + (height + 25) + ")")
-            .call(d3.axisBottom(x0));
-
-        for(let i = 0; i < 8; i++) {
-            svg.append("g")
-                .attr("transform", "translate(" + x0.bandwidth() * i  + "," + (height + 0) + ")")
-                .call(d3.axisBottom(x1));   
-        }        
+        chart2.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);   
     
-        // Add Y axis
+        //Eje Y
         let y = d3.scaleLinear()
             .domain([0, 100])
-            .range([ height, 0 ]);
+            .range([height, 0]);
 
-        let yAxis = function(svg) {
-            svg.call(d3.axisLeft(y).ticks(5).tickFormat(function(d,i) { return numberWithCommas3(d); }));
-            svg.call(function(g) {
-                g.call(function(g){
-                    g.selectAll('.tick line')
-                        .attr('class', function(d,i) {
-                            if (d == 0) {
-                                return 'line-special';
-                            }
-                        })
-                        .attr('x1', '0%')
-                        .attr('x2', `${width}`)
-                });
-            });
+        let yAxis = function(g) {
+            g.call(d3.axisLeft(y).ticks(5));
+            g.selectAll('.tick line')
+                .attr('class', function(d,i) {
+                    if (d == 0) {
+                        return 'line-special';
+                    }
+                })
+                .attr('x1', '0')
+                .attr('x2', `${width}`);
         }
 
-        svg.append("g")
+        chart1.append("g")
             .attr("class", "yaxis")
             .call(yAxis);
 
-        let z = d3.scaleOrdinal()
-            .domain(d3.map(dataFiltered, function(d){ return d['Estado de salud']; }).keys().reverse())
+        chart2.append("g")
+            .attr("class", "yaxis")
+            .call(yAxis);
+
+        //COLORES
+        let color = d3.scaleOrdinal()
+            .domain(grupos)
             .range([COLOR_PRIMARY_2, COLOR_PRIMARY_1, COLOR_GREY_1, COLOR_COMP_2, COLOR_COMP_1]);
 
-        let groupData = d3.nest()
-            .key(function(d) { return d.Sexo + d.Edad; })
-            .rollup(function(d, i){            
-                let d2 = {Sexo: d[0].Sexo, Edad: d[0].Edad}
-                d.forEach(function(d){
-                    d2[d['Estado de salud']] = +d.Valor
-                });
-            return d2;
-        })
-        .entries(dataFiltered).map(function(d){ return d.value; });
-        
-        let stackData = d3.stack()
-            .keys(z.domain())
-            (groupData);
+        let stackDataMen = d3.stack()
+            .keys(color.domain())
+            (dataMen);
 
-        console.log(stackData);
+        let stackDataWomen = d3.stack()
+            .keys(color.domain())
+            (dataWomen);
 
-        let serie = svg.selectAll(".serie")
-            .data(stackData)
-            .enter()
-            .append("g")
-            .attr("class", function(d,i) {
-                return 'serie serie-' + i;
-            })
-            .attr("fill", function(d) { return z(d.key); });
+        console.log(dataMen, stackDataMen);
 
         function init() {  
-            serie.selectAll("rect")
+            chart1.append("g")
+                .attr('class','chart-g-1')
+                .selectAll("g")
+                .data(stackDataMen)
+                .enter()
+                .append("g")
+                .attr("fill", function(d) { return color(d.key); })
+                .attr('class', function(d) {
+                    return 'rect-padre-1 ' + d.key;
+                })
+                .selectAll("rect")
                 .data(function(d) { return d; })
                 .enter()
                 .append("rect")
-                .attr("class", "rect")
-                .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
-                .attr("x", function(d) { return x1(d.data.Sexo); })
+                .attr('class', 'rect-1')
+                .attr("x", function(d) { return x(d.data.Edad); })
                 .attr("y", function(d) { return y(0); })
                 .attr("height", function(d) { return 0; })
-                .attr("width", x1.bandwidth())
+                .attr("width",x.bandwidth())
                 .on('mouseover', function(d,i,e) {
-                    //Opacidad en barras
-                    let bars = svg.selectAll('.rect');
-                    let parentElem = svg.select(`.${this.parentNode.classList.value.split(' ')[1]}`);
-                    let childElems = parentElem.selectAll('.rect');            
-            
-                    bars.each(function() {
-                        this.style.opacity = '0.4';
+                    //Opacidad de las barras
+                    let current = this.parentNode.classList[1];
+                    let other_1 = chart1.selectAll('.rect-1');
+                    let other_2 = chart2.selectAll('.rect-2');
+                    let _this_1 = chart1.selectAll(`.${current.split('_')[0]}_hombres`); //Elemento padre
+                    let _thisChilds_1 = _this_1.selectAll('.rect-1');
+                    let _this_2 = chart2.selectAll(`.${current.split('_')[0]}_mujeres`); //Elemento padre
+                    let _thisChilds_2 = _this_2.selectAll('.rect-2');
+                    
+                    other_1.each(function() {
+                        this.style.opacity = '0.2';
                     });
-                    childElems.each(function() {
+                    other_2.each(function() {
+                        this.style.opacity = '0.2';
+                    });
+                    _thisChilds_1.each(function() {
+                        this.style.opacity = '1';
+                    });
+                    _thisChilds_2.each(function() {
                         this.style.opacity = '1';
                     });
 
-                    //Tooltip
-                    let currentType = this.parentNode.classList.value.split(' ')[1];
-                    let sexo = d.data.Sexo == 'M' ? 'mujeres' : 'hombres';
+                    //Texto                    
                     let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
-                            '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de <b>' + sexo +'</b> en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                        '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de hombres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                    
+                    tooltip.html(html);
+
+                    //Tooltip
+                    positionTooltip(window.event, tooltip);
+                    getInTooltip(tooltip);
+
+                })
+                .on('mouseout', function(d,i,e) {
+                    //Quitamos los estilos de la línea
+                    let bars_1 = chart1.selectAll('.rect-1');
+                    let bars_2 = chart2.selectAll('.rect-2');
+                    bars_1.each(function() {
+                        this.style.opacity = '1';
+                    });
+                    bars_2.each(function() {
+                        this.style.opacity = '1';
+                    });
+                
+                    //Quitamos el tooltip
+                    getOutTooltip(tooltip); 
+                })
+                .transition()
+                .duration(2000)
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); });
+
+            chart2.append("g")
+                .attr('class','chart-g-2')
+                .selectAll("g")
+                .data(stackDataWomen)
+                .enter()
+                .append("g")
+                .attr("fill", function(d) { return color(d.key); })
+                .attr('class', function(d) {
+                    return 'rect-padre-2 ' + d.key;
+                })
+                .selectAll("rect")
+                .data(function(d) { return d; })
+                .enter()
+                .append("rect")
+                .attr('class','rect-2')
+                .attr("x", function(d) { return x(d.data.Edad); })
+                .attr("y", function(d) { return y(0); })
+                .attr("height", function(d) { return 0; })
+                .attr("width",x.bandwidth())
+                .on('mouseover', function(d,i,e) {
+                    //Opacidad de las barras
+                    let current = this.parentNode.classList[1];
+                    let other_1 = chart1.selectAll('.rect-1');
+                    let other_2 = chart2.selectAll('.rect-2');
+                    let _this_1 = chart1.selectAll(`.${current.split('_')[0]}_hombres`); //Elemento padre
+                    let _thisChilds_1 = _this_1.selectAll('.rect-1');
+                    let _this_2 = chart2.selectAll(`.${current.split('_')[0]}_mujeres`); //Elemento padre
+                    let _thisChilds_2 = _this_2.selectAll('.rect-2');
+                    
+                    other_1.each(function() {
+                        this.style.opacity = '0.2';
+                    });
+                    other_2.each(function() {
+                        this.style.opacity = '0.2';
+                    });
+                    _thisChilds_1.each(function() {
+                        this.style.opacity = '1';
+                    });
+                    _thisChilds_2.each(function() {
+                        this.style.opacity = '1';
+                    });
+
+                    //Texto                    
+                    let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
+                        '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de mujeres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
                     
                     tooltip.html(html);
 
@@ -158,32 +255,45 @@ export function initChart() {
                     getInTooltip(tooltip);
                 })
                 .on('mouseout', function(d,i,e) {
-                    //Opacidad
-                    let bars = svg.selectAll('.rect');
-                    bars.each(function() {
+                    //Quitamos los estilos de la línea
+                    let bars_1 = chart1.selectAll('.rect-1');
+                    let bars_2 = chart2.selectAll('.rect-2');
+                    bars_1.each(function() {
                         this.style.opacity = '1';
                     });
-
+                    bars_2.each(function() {
+                        this.style.opacity = '1';
+                    });
+                
                     //Quitamos el tooltip
-                    getOutTooltip(tooltip);
+                    getOutTooltip(tooltip); 
                 })
                 .transition()
                 .duration(2000)
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); });
         }
 
         function animateChart() {
-            serie.selectAll(".rect")
-                .attr("transform", function(d) { return "translate(" + x0(d.data.Edad) + ",0)"; })
-                .attr("x", function(d) { return x1(d.data.Sexo); })
+            chart1.selectAll('.rect-1')
+                .attr("x", function(d) { return x(d.data.Edad); })
                 .attr("y", function(d) { return y(0); })
                 .attr("height", function(d) { return 0; })
-                .attr("width", x1.bandwidth())
+                .attr("width",x.bandwidth())
                 .transition()
                 .duration(2000)
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); });
+
+            chart2.selectAll('.rect-2')
+                .attr("x", function(d) { return x(d.data.Edad); })
+                .attr("y", function(d) { return y(0); })
+                .attr("height", function(d) { return 0; })
+                .attr("width",x.bandwidth())
+                .transition()
+                .duration(2000)
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); });
         }
 
         //////

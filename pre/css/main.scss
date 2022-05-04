@@ -109,8 +109,8 @@ button {
         //Debajo de todos los elementos lógicos tendremos la leyenda > Puede haber de 1 a 7 elementos dentro de la leyenda
         &__legend {
             display: flex;
-            flex-wrap: wrap;        
-            
+            flex-wrap: wrap;            
+
             width: calc(100% - 141px);
 
             &--item {
@@ -150,46 +150,50 @@ button {
                 &.anag_prim_3::before { background-color: #9E3515 ;}
                 &.anag_comp_1::before { background-color: #1C5A5E;}
             }
-        }        
+        }       
 
         //Visualización
         &__viz {
+            height: auto;
             margin-top: 8px;
-            //Títulos en ejes > En otra parte
 
-            //Visualización
-            .chart {
-                height: 406px;
+            .chart__bars:last-child {
+                margin-top: 16px;
+            }
 
-                //Texto y estilos de ejes
-                & .tick text {
-                    font-family: 'Montserrat';
-                    font-style: normal;
-                    font-weight: 300;
-                    font-size: 12px;
-                    line-height: 10px;
-                
-                    color: #262626;
-                }
+            //Visualizaciones
+            #bars--first, #bars--second {
+                width: 100%;
+                height: 325px;
+            }
 
-                .domain {
-                    stroke: #262626;
-                    stroke-width: 1px;
-                }
-                
-                & .tick line {
-                    stroke: #262626;
-                    opacity: 0.7;
-                    stroke-dasharray: 5;
-                    stroke-width: 0.5px;
-                }
-                
-                & .line-special {
-                    stroke: #000 !important;
-                    stroke-dasharray: 0 !important;
-                    stroke-width: 1px !important;
-                }
-            }           
+            & .tick text {
+                font-family: 'Montserrat';
+                font-style: normal;
+                font-weight: 300;
+                font-size: 12px;
+                line-height: 10px;
+            
+                color: #A3A3A3;
+            }
+
+            .domain {
+                stroke: #262626;
+                stroke-width: 1px;
+            }
+            
+            & .tick line {
+                stroke: #262626;
+                opacity: 0.7;
+                stroke-dasharray: 5;
+                stroke-width: 0.5px;
+            }
+            
+            & .line-special {
+                stroke: #000 !important;
+                stroke-dasharray: 0 !important;
+                stroke-width: 1px !important;
+            }
         }
 
         //Pie
@@ -286,6 +290,7 @@ button {
     }
 
     &__animate {
+        width: 141px;
         height: 32px;
         border: 1.2px solid #E37A42;
         
@@ -335,6 +340,15 @@ button {
         & + .text__header {
             margin-top: 24px;
         }
+    }
+
+    &__viz {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 0.9em;
+        line-height: 10px;
+        
+        text-align: center;
     }
 
     &__yaxis {
@@ -436,7 +450,7 @@ button {
     position: absolute;
     opacity: 0;   
 
-    width: 135px;
+    width: 145px;
     height: auto;
     padding: 8px;
     background-color: #fffaf0;
