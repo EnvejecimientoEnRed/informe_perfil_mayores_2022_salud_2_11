@@ -17,11 +17,11 @@ let tooltip = d3.select('#tooltip');
 
 //Diccionario
 let dictionary = {
-    0: 'Muy mala',
-    1: 'Mala',
-    2: 'Regular',
-    3: 'Buena',
-    4: 'Muy buena'
+    muy_mala: 'Muy mala',
+    mala: 'Mala',
+    regular: 'Regular',
+    buena: 'Buena',
+    muy_buena: 'Muy buena'
 };
 
 export function initChart() {
@@ -72,7 +72,8 @@ export function initChart() {
         //EJES X
         let x = d3.scaleBand()
             .domain(d3.map(dataFiltered, function(d){ return d.Edad; }).keys())
-            .range([0, width]);
+            .range([0, width])
+            .padding(0.4);
 
         let xAxis = function(g) {
             g.call(d3.axisBottom(x));
@@ -127,8 +128,6 @@ export function initChart() {
             .keys(color.domain())
             (dataWomen);
 
-        console.log(dataMen, stackDataMen);
-
         function init() {  
             chart1.append("g")
                 .attr('class','chart-g-1')
@@ -154,9 +153,9 @@ export function initChart() {
                     let current = this.parentNode.classList[1];
                     let other_1 = chart1.selectAll('.rect-1');
                     let other_2 = chart2.selectAll('.rect-2');
-                    let _this_1 = chart1.selectAll(`.${current.split('_')[0]}_hombres`); //Elemento padre
+                    let _this_1 = chart1.selectAll(`.${current}`); //Elemento padre
                     let _thisChilds_1 = _this_1.selectAll('.rect-1');
-                    let _this_2 = chart2.selectAll(`.${current.split('_')[0]}_mujeres`); //Elemento padre
+                    let _this_2 = chart2.selectAll(`.${current}`); //Elemento padre
                     let _thisChilds_2 = _this_2.selectAll('.rect-2');
                     
                     other_1.each(function() {
@@ -173,8 +172,7 @@ export function initChart() {
                     });
 
                     //Texto                    
-                    let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
-                        '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de hombres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                    let html = '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[current]) + '%</b> de hombres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[current].toLowerCase() +'</b></p>';
                     
                     tooltip.html(html);
 
@@ -226,9 +224,9 @@ export function initChart() {
                     let current = this.parentNode.classList[1];
                     let other_1 = chart1.selectAll('.rect-1');
                     let other_2 = chart2.selectAll('.rect-2');
-                    let _this_1 = chart1.selectAll(`.${current.split('_')[0]}_hombres`); //Elemento padre
+                    let _this_1 = chart1.selectAll(`.${current}`); //Elemento padre
                     let _thisChilds_1 = _this_1.selectAll('.rect-1');
-                    let _this_2 = chart2.selectAll(`.${current.split('_')[0]}_mujeres`); //Elemento padre
+                    let _this_2 = chart2.selectAll(`.${current}`); //Elemento padre
                     let _thisChilds_2 = _this_2.selectAll('.rect-2');
                     
                     other_1.each(function() {
@@ -245,8 +243,7 @@ export function initChart() {
                     });
 
                     //Texto                    
-                    let html = '<p class="chart__tooltip--title">Salud percibida: ' + dictionary[currentType.split('-')[1]] + '</p>' + 
-                        '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[dictionary[currentType.split('-')[1]]]) + '%</b> de mujeres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[currentType.split('-')[1]].toLowerCase() +'</b></p>';
+                    let html = '<p class="chart__tooltip--text">Un <b>' + numberWithCommas3(d.data[current]) + '%</b> de mujeres en el grupo de edad <b>' + d.data.Edad + '</b> perciben que su salud es <b>' + dictionary[current].toLowerCase() +'</b></p>';
                     
                     tooltip.html(html);
 
